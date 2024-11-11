@@ -1,0 +1,17 @@
+{
+  # to use handle_path for prefixes, pmtiles_proxy must have a defined
+  # position in the ordering of handlers.
+  order pmtiles_proxy before reverse_proxy
+  email ${MAPS_EMAIL}
+}
+
+${MAPS_DOMAIN} {
+  handle_path /tiles/* {
+    pmtiles_proxy {
+      bucket ${MAPS_PMTILES_LOCATION}
+      cache_size 19000
+      # used to embed a tiles URL in TileJSON.
+      public_url https://${MAPS_DOMAIN}/tiles
+    }
+  }
+}
