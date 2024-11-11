@@ -18,9 +18,8 @@
 }
 
 ${MAPS_DOMAIN} {
-  # Match any subdomain pattern for CORS
   @allowed_origins {
-    expression {header.Origin}.matches('^https://([a-zA-Z0-9-]+\\.)*${MAPS_SERVE_DOMAIN}$')
+    expression {header.Origin}.matches('^https://([a-zA-Z0-9-]+\\.)*${MAPS_SERVE_DOMAIN}$') || {header.Origin}.matches('^https://maplibre\\.org$')
   }
 
   header @allowed_origins {
