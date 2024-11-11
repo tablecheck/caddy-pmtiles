@@ -5,40 +5,37 @@
   email ${MAPS_EMAIL}
 }
 
-
 (cors) {
-  @cors_preflight{args.0} method OPTIONS
-  @cors{args.0} header Origin {args.0}
-
-  handle @cors_preflight{args.0} {
-    header {
-      Access-Control-Allow-Origin "{args.0}"
-      Access-Control-Allow-Methods "GET, POST, PUT, PATCH, DELETE, OPTIONS"
-      Access-Control-Allow-Headers *
-      Access-Control-Max-Age "3600"
-      defer
-    }
-    respond "" 204
-  }
-
-  handle @cors{args.0} {
-    header {
-      Access-Control-Allow-Origin "{args.0}"
-      Access-Control-Expose-Headers *
-      defer
-    }
+  @origin header Origin {args.0}
+  header @origin {
+    Access-Control-Allow-Origin "{header.Origin}"
+    Access-Control-Allow-Methods "GET, POST, PUT, PATCH, DELETE, OPTIONS"
+    Access-Control-Allow-Headers "*"
+    Access-Control-Allow-Credentials "true"
+    Access-Control-Max-Age "3600"
+    defer
   }
 }
 
 ${MAPS_DOMAIN} {
-  import cors https://${MAPS_SERVE_DOMAIN}
-  import cors https://www.${MAPS_SERVE_DOMAIN}
-  import cors https://*.${MAPS_SERVE_DOMAIN}
+  # Match any subdomain pattern for CORS
+  @allowed_origins {
+    expression {header.Origin}.matches('^https://([a-zA-Z0-9-]+\\.)*${MAPS_SERVE_DOMAIN}$')
+  }
+
+  header @allowed_origins {
+    Access-Control-Allow-Origin "{header.Origin}"
+    Access-Control-Allow-Methods "*"
+    Access-Control-Allow-Headers "*"
+    Access-Control-Allow-Credentials "true"
+    Access-Control-Max-Age "3600"
+    defer
+  }
+
   handle_path /tiles/* {
     pmtiles_proxy {
       bucket ${MAPS_PMTILES_LOCATION}
       cache_size 19000
-      # used to embed a tiles URL in TileJSON.
       public_url https://${MAPS_DOMAIN}/tiles
     }
   }
