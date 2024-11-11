@@ -1,6 +1,4 @@
 {
-  # to use handle_path for prefixes, pmtiles_proxy must have a defined
-  # position in the ordering of handlers.
   order pmtiles_proxy before reverse_proxy
   email ${MAPS_EMAIL}
 }
@@ -17,7 +15,7 @@
   }
 }
 
-${MAPS_DOMAIN} {
+${MAPS_DOMAIN}:${MAPS_PORT} {
   @allowed_origins {
     expression {header.Origin}.matches('^https://([a-zA-Z0-9-]+\\.)*${MAPS_SERVE_DOMAIN}$') || {header.Origin}.matches('^https://maplibre\\.org$')
   }
