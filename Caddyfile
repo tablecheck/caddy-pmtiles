@@ -17,7 +17,7 @@
 
 ${MAPS_DOMAIN}:${MAPS_PORT} {
   @allowed_origins {
-    expression {header.Origin}.matches('^https://([a-zA-Z0-9-]+\\.)*${MAPS_SERVE_DOMAIN}$') || {header.Origin}.matches('^https://maplibre\\.org$')
+    expression {header.Origin}.matches('^${MAPS_SERVE_DOMAIN}$') || {header.Origin}.matches('^https://maplibre\\.org$')
   }
 
   header @allowed_origins {

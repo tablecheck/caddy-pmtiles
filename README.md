@@ -27,7 +27,7 @@ A Docker container that serves PMTiles using Caddy with S3 bucket support and CO
 ```bash
 docker run -d \
 -e MAPS_DOMAIN=tiles.example.com \
--e MAPS_SERVE_DOMAIN=example.com \
+-e MAPS_SERVE_DOMAIN=https://([a-zA-Z0-9-]+\\.)*example.com \
 -e MAPS_PMTILES_LOCATION=s3://your-bucket \
 -e AWS_ACCESS_KEY_ID=your_key \
 -e AWS_SECRET_ACCESS_KEY=your_secret \
